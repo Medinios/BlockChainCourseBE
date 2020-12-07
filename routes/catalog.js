@@ -2,39 +2,41 @@ var express = require('express');
 var router = express.Router();
 
 // Require controller modules.
-var block_controller = require('../controllers/BlockController');
-var transaction_controller = require('../controllers/TransactionController');
-var blockChain_controller = require('../controllers/BlockChainController');
+var block_controller = require('../controllers/blockController');
+var transaction_controller = require('../controllers/transactionController');
+var blockChain_controller = require('../controllers/blockChainController');
 
-/// Block ROUTES ///
+/// block ROUTES ///
 
-// GET request for creating a Block. NOTE This must come before routes that display Block (uses id).
-router.get('/Block/create', block_controller.block_create_get);
+// GET request for creating a block. NOTE This must come before routes that display block (uses id).
+router.get('/block/create', block_controller.block_create_get);
 
-// POST request for creating Block.
-router.post('/Block/create', block_controller.block_create_post);
+// POST request for creating block.
+router.post('/block/create', block_controller.block_create_post);
 
-// GET request for one Block.
-router.get('/Block/:id', block_controller.block_detail);
+// GET request for one block.
+router.get('/block/:id', block_controller.block_detail);
 
-// GET request for list of all Block items.
-router.get('/Blocks', block_controller.block_list);
+// GET request for list of all block items.
+router.get('/blocks', block_controller.block_list);
 
-/// Transaction ROUTES ///
+/// transaction ROUTES ///
 
-// GET request for creating Transaction. NOTE This must come before route for id (i.e. display Transaction).
-router.get('/Transaction/:from/:to/:amount/create', transaction_controller.transaction_create_get);
+// GET request for creating transaction. NOTE This must come before route for id (i.e. display transaction).
+router.get('/transaction/:from/:to/:amount/create', transaction_controller.transaction_create_get);
 
-// POST request for creating Transaction.
-router.post('/Transaction/create', transaction_controller.transaction_create_post);
+// POST request for creating transaction.
+router.post('/transaction/create', transaction_controller.transaction_create_post);
 
+/// blockChain ROUTES ///
 
-/// BlockChain ROUTES ///
+// // GET request to update blockChain.
+// router.get('/blockChain/:id/update', blockChain_controller.blockChain_update_get);
 
-// GET request to update BlockChain.
-router.get('/BlockChain/:id/update', blockChain_controller.blockChain_update_get);
+// // POST request to update blockChain.
+// router.post('/blockChain/:id/update', blockChain_controller.blockChain_update_post);
 
-// POST request to update BlockChain.
-router.post('/BlockChain/:id/update', blockChain_controller.blockChain_update_post);
+// // request to detail blockChain.
+// router.post('/blockChain/:id/detail', blockChain_controller.blockChain_detail);
 
 module.exports = router;
