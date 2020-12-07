@@ -8,17 +8,11 @@ var blockChain_controller = require('../controllers/blockChainController');
 
 /// block ROUTES ///
 
-// GET request for creating a block. NOTE This must come before routes that display block (uses id).
-router.get('/block/create', block_controller.block_create_get);
-
 // POST request for creating block.
-router.post('/block/create', block_controller.block_create_post);
+router.post('/block/create/:walletAddress', block_controller.block_create_post);
 
 // GET request for one block.
 router.get('/block/:id', block_controller.block_detail);
-
-// GET request for list of all block items.
-router.get('/blocks', block_controller.block_list);
 
 /// transaction ROUTES ///
 

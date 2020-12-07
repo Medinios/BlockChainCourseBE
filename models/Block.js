@@ -5,6 +5,7 @@ const {
 const {
     BloomFilter
 } = require('bloom-filters')
+
 class Block {
     constructor(timestamp, transactions, previousHash = '') {
         this.previousHash = previousHash
@@ -53,4 +54,5 @@ class Block {
     }
 
 }
+
 module.exports.Block = Block
