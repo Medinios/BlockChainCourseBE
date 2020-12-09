@@ -5,6 +5,9 @@ const {
 const {
     BloomFilter
 } = require('bloom-filters')
+const {
+    Transaction
+} = require('./Transaction')
 
 class Block {
     constructor(timestamp, transactions, previousHash = '') {
@@ -24,8 +27,7 @@ class Block {
             this.nonce++
             this.hash = this.calculateHash()
         }
-
-        let hashTransactions = this.transactions.map(x => x.calculateHash())
+        let hashTransactions = this.transactions.map(x => Object.assign(new Transaction, x).calculateHash())
         this.bloomFilter = BloomFilter.from(hashTransactions, 0.05)
         this.merkleTree = new MerkleTree(hashTransactions)
         console.log('Block mined - ' + this.hash);

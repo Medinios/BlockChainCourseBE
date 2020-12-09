@@ -6,7 +6,7 @@ const {
     Transaction
 } = require('./Transaction.js')
 
-class Blockchain {
+class BlockChain {
     constructor() {
         this.chain = [this.createGenesisBlock()]
         this.difficulty = 2
@@ -22,15 +22,17 @@ class Blockchain {
     }
 
     miningPendingTransaction(miningRewardAddress) {
-        const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward)
-        this.pendingTransaction.push(rewardTx)
-
-        let block = new Block(Date.now(), this.pendingTransaction, this.getLatestBlock().hash)
-        block.mineBlock(this.difficulty)
-        console.log('Block Successfully Mined')
-
-        this.chain.push(block)
-        this.pendingTransaction = []
+        if (this.pendingTransaction.length != 0) {
+            const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward)
+            this.pendingTransaction.push(rewardTx)
+            let block = new Block(Date.now(), this.pendingTransaction, this.getLatestBlock().hash)
+            block.mineBlock(this.difficulty)
+            console.log('Block Successfully Mined')
+            this.chain.push(block)
+            this.pendingTransaction = []
+        } else {
+            console.log("There is nothing to mine...");
+        }
     }
 
     addTransaction(transaction) {
@@ -82,4 +84,4 @@ class Blockchain {
         return true
     }
 }
-module.exports.Blockchain = Blockchain
+module.exports.BlockChain = BlockChain
