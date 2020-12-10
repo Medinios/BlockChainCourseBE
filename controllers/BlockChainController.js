@@ -74,7 +74,9 @@ exports.blockchain_verify_get = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            Object.assign(new Block, doc.chain[1]).calculateHash()
+            doc.toBlockChain()
+            doc.chain[1].calculateHash()
+            console.log(doc);
             // doc.chain = Object.assign(new Array, doc.chain)
             // for (var block of doc.chain) {
             //     block.pendingTransaction = Object.assign(new Array, block.pendingTransaction)
@@ -104,7 +106,8 @@ function get_blockchain_from_server() {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            return Object.assign(new BlockChain, JSON.stringify(doc))
+            doc.getFromServer()
+            console.log(doc);
         })
         .catch(err => {
             console.log(err);

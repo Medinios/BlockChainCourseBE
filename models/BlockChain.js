@@ -83,5 +83,17 @@ class BlockChain {
         }
         return true
     }
+
+    toBlockChain() {
+        for (var block of this.chain) {
+            block = Object.assign(new Block, block)
+            for (var tx of block.transactions) {
+                tx = Object.assign(new Transaction, tx)
+            }
+        }
+        for (var tx of this.pendingTransaction) {
+            tx = Object.assign(new Transaction, tx)
+        }
+    }
 }
 module.exports.BlockChain = BlockChain
