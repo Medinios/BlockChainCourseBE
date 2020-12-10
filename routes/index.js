@@ -7,12 +7,17 @@ router.get('/', function (req, res, next) {
   res.send('Hello')
 });
 
-// // POST request to update blockchain.
-router.post('/blockchain/update', blockchain_controller.blockchain_update_post);
+// // POST request to mine
+router.post('/blockchain/mining', blockchain_controller.blockchain_perform_mining_post);
 
-// // POST request to create blockchain.
+// // POST request to create blockchain
 router.post('/blockchain/create', blockchain_controller.blockchain_create_post);
 
-// // GET request to detail blockchain.
-router.post('/blockchain/add_transaction', blockchain_controller.blockchain_add_transaction);
+// // POST request to add transaction
+router.post('/blockchain/add_transaction', blockchain_controller.blockchain_add_transaction_post);
+
+// // POST request to verify transaction was made
+router.get('/blockchain/verify', blockchain_controller.blockchain_verify_get);
+
+
 module.exports = router;
