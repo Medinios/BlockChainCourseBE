@@ -20,7 +20,7 @@ router.post('/blockchain/add_transaction', blockchain_controller.blockchain_add_
 router.get('/blockchain/verify', blockchain_controller.blockchain_verify_get);
 
 // // GET request to get balance for address
-router.get('/blockchain/get_balance', blockchain_controller.blockchain_get_balance);
+router.post('/blockchain/get_balance', blockchain_controller.blockchain_get_balance);
 
 // // GET request to get balance for address
 router.get('/blockchain/get_transactions', blockchain_controller.blockchain_get_transactions);

@@ -109,7 +109,6 @@ exports.blockchain_get_balance = function (req, res) {
                 Error: "Error"
             })
         })
-
 }
 
 // GET user transactions
