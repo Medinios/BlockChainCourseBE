@@ -20,6 +20,7 @@ exports.blockchain_perform_mining_post = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
+            console.log(request.publicKey);
             doc.toBlockChainSchema().miningPendingTransaction(request.publicKey)
             doc.save()
             res.json(doc)
@@ -90,4 +91,42 @@ exports.blockchain_verify_get = function (req, res) {
                 Error: "Error"
             })
         })
+}
+
+// GET user balance
+exports.blockchain_get_balance = function (req, res) {
+    const request = req.body
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            res.json({
+                balance: doc.toBlockChainSchema().getBalanceOfAddress(request.publicKey)
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}
+
+// GET user transactions
+exports.blockchain_get_transactions = function (req, res) {
+    const request = req.body
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            res.json({
+                transactions: doc.toBlockChainSchema().getTransactionsOfAddress(request.publicKey)
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
 }

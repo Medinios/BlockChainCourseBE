@@ -29,7 +29,6 @@ class BlockChain {
         if (this.pendingTransaction.length != 0) {
             const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward)
             this.pendingTransaction.push(rewardTx)
-            //(previousHash = '', timestamp, transactions, nonce = 0)
             let block = new Block(this.getLatestBlock().hash, Date.now(), this.pendingTransaction, 0)
             block.mineBlock(this.difficulty)
             console.log('Block Successfully Mined')
@@ -60,13 +59,27 @@ class BlockChain {
                 if (trans.toAddress === address) {
                     balance += trans.amount
                 }
-
             }
-
         }
-
         return balance
+    }
 
+    getTransactionsOfAddress(address) {
+        var txs = {
+            received: [],
+            sent: []
+        }
+        for (const block of this.chain) {
+            for (const trans of block.transactions) {
+                if (trans.fromAddress === address) {
+                    txs.sent.push(trans)
+                }
+                if (trans.toAddress === address) {
+                    txs.received.push(trans)
+                }
+            }
+        }
+        return txs
     }
 
     isChainValidate() {
@@ -133,6 +146,12 @@ class BlockChain {
             this.pendingTransaction[i] = Object.assign(new Transaction, this.pendingTransaction[i])
         }
         return this
+
+    }
+    addNewUser(publicKey) {
+        var tx = new Transaction(null, publicKey, 1000)
+        var block = new Block(this.getLatestBlock(), Date.now(), [tx], 0)
+        this.chain.push(block.mineBlock(this.difficulty))
     }
 
 }

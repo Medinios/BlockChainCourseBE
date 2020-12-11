@@ -11,19 +11,32 @@ const {
 const EC = require('elliptic').ec
 
 const ec = new EC('secp256k1')
+myKey1 = ec.keyFromPublic('041ac13bb52a90c7458d26b80170a3d7fcacefdc949741b9cb8ea363d0df3bddcd6a4fb5e20c7734ed8fdea1250b2407792e33481ac5eabc7e9e4b1e7dc394111d')
+myKey2 = ec.keyFromPrivate('b5acc398e39a05efb456a54f30e37f4f1916f24963b23a627b4c8900cdcf4aa2')
 
-myKey = ec.keyFromPublic('Daniel')
-const myWalletAddress = myKey.getPublic('hex')
-console.log(myWalletAddress);
-// let micaCoin = new BlockChain()
+// console.log(myKey1 === myKey2);
+// const myWalletAddress = myKey.getPublic('hex')
+// // console.log(myWalletAddress);
+
+
+
+// // let micaCoin = new BlockChain()
 
 // const tx1 = new Transaction(myWalletAddress, 'address2', 30)
+// const tx2 = new Transaction(myWalletAddress, 'address3', 30)
 // tx1.signTransaction(myKey)
 // // tx1.calculateHash()
 // sashaCoin = new BlockChain()
+// sashaCoin.chain.push(sashaCoin.createGenesisBlock())
+
 // sashaCoin.addTransaction(tx1)
 // sashaCoin.miningPendingTransaction("Wallet")
-// console.log(sashaCoin.chain);
+// sashaCoin.hasTransaction(tx1)
+// console.log("tx1: " + sashaCoin.chain[1].hasTransaction(tx1));
+// console.log("tx2: " + sashaCoin.chain[1].hasTransaction(tx2));
+
+// console.log(Date.now());
+// // console.log(sashaCoin.chain);
 
 // test = {
 //     "timestamp": "",

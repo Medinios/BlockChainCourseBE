@@ -52,6 +52,7 @@ class Block {
         this.initBloomFilter()
         this.initMerkleTree()
         console.log('Block mined - ' + this.hash);
+        return this
     }
 
 
