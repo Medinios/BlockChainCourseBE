@@ -3,11 +3,11 @@ const EC = require('elliptic').ec
 const ec = new EC('secp256k1')
 
 class Transaction {
-    constructor(fromAddress, toAddress, amount) {
+    constructor(fromAddress, toAddress, amount, timestamp = Date.now()) {
         this.fromAddress = fromAddress
         this.toAddress = toAddress
         this.amount = amount
-        this.timestamp = Date.now()
+        this.timestamp = timestamp
     }
     calculateHash() {
         return SHA256(this.fromAddress + this.toAddress + this.amount + this.timestamp).toString()
@@ -30,6 +30,11 @@ class Transaction {
         const publicKey = ec.keyFromPublic(this.fromAddress, 'hex')
         return publicKey.verify(this.calculateHash(), this.signature)
 
+    }
+
+    toTransaction() {
+        var newTransaction = new Transaction(this.fromAddress, this.toAddress, this.amount, this.timestamp)
+        return newTransaction
     }
 
 

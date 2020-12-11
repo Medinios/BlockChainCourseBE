@@ -12,15 +12,30 @@ const EC = require('elliptic').ec
 
 const ec = new EC('secp256k1')
 
-const myKey = ec.keyFromPrivate('e1809134428d3432f51d708592bcfffd6e58dd735feee50190e3a55617556178')
-
+myKey = ec.keyFromPublic('Daniel')
 const myWalletAddress = myKey.getPublic('hex')
+console.log(myWalletAddress);
+// let micaCoin = new BlockChain()
 
-let micaCoin = new BlockChain()
+// const tx1 = new Transaction(myWalletAddress, 'address2', 30)
+// tx1.signTransaction(myKey)
+// // tx1.calculateHash()
+// sashaCoin = new BlockChain()
+// sashaCoin.addTransaction(tx1)
+// sashaCoin.miningPendingTransaction("Wallet")
+// console.log(sashaCoin.chain);
 
-const tx1 = new Transaction(myWalletAddress, 'address2', 30)
-tx1.calculateHash()
-
+// test = {
+//     "timestamp": "",
+//     "transactions": Object.assign(new Array, [1, 2]),
+//     "previousHash": 'lol2k',
+//     "nonce": 2,
+//     "hash": "This is the end"
+// }
+// console.log(test);
+// test = Object.assign(new Block, test)
+// console.log(test);
+// test.calculateHash()
 // tx1.signTransaction(myKey)
 // micaCoin.addTransaction(tx1)
 // micaCoin.miningPendingTransaction(myWalletAddress)

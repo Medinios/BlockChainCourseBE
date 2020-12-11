@@ -1,4 +1,5 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
+const ObjectId = require('mongoose/lib/schema/objectid');
 const Schema = mongoose.Schema;
 const {
     BlockChain

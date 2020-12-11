@@ -18,7 +18,7 @@ exports.blockchain_perform_mining_post = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            doc.miningPendingTransaction("Daniel")
+            doc.toBlockChainSchema().miningPendingTransaction("041ac13bb52a90c7458d26b80170a3d7fcacefdc949741b9cb8ea363d0df3bddcd6a4fb5e20c7734ed8fdea1250b2407792e33481ac5eabc7e9e4b1e7dc394111d")
             doc.save()
             res.json(doc)
         })
@@ -29,13 +29,14 @@ exports.blockchain_perform_mining_post = function (req, res) {
             })
         })
 };
+
 exports.blockchain_create_post = function (req, res) {
     let sashaCoin = new BlockChainSchema({
         _id: 1,
         chain: [],
         difficulty: 2,
         pendingTransaction: [],
-        miningReward: 90
+        miningReward: 100
     })
     sashaCoin.chain.push(sashaCoin.createGenesisBlock())
     sashaCoin.save().then(result => {
@@ -51,32 +52,32 @@ exports.blockchain_create_post = function (req, res) {
 
 // Add transaction
 exports.blockchain_add_transaction_post = function (req, res) {
-    BlockChainSchema.update(({
-            _id: 1
-        }, {
-            $push: {
-                pendingTransaction: new Transaction(req.body.from, req.body.to, req.body.amount).signTransaction(ec.keyFromPrivate(req.body.privateKey)) // TO DO: add .signTransaction 
-            }
-        })).exec()
+    tx = new Transaction(req.body.from, req.body.to, req.body.amount)
+    tx.signTransaction(ec.keyFromPrivate(req.body.privateKey))
+    BlockChainSchema.findById(1)
+        .exec()
         .then(doc => {
-            res.status(200).json({
-                message: "OK"
+            doc.toBlockChainSchema().addTransaction(tx)
+            doc.save()
+            res.json({
+                doc
             })
         })
         .catch(err => {
-            res.status(500).json({
-                error: err
+            console.log(err);
+            res.json({
+                Error: "Error"
             })
         })
-};
+}
+
 
 exports.blockchain_verify_get = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            doc.toBlockChain()
-            doc.chain[1].calculateHash()
-            console.log(doc);
+            console.log(doc.toBlockChain().chain[0]);
+            // doc.chain[1].calculateHash()
             // doc.chain = Object.assign(new Array, doc.chain)
             // for (var block of doc.chain) {
             //     block.pendingTransaction = Object.assign(new Array, block.pendingTransaction)

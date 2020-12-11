@@ -10,16 +10,26 @@ const {
 } = require('./Transaction')
 
 class Block {
-    constructor(timestamp, transactions, previousHash = '') {
+    constructor(previousHash = '', timestamp, transactions, nonce = 0) {
         this.previousHash = previousHash
         this.timestamp = timestamp
         this.transactions = transactions
+        this.nonce = nonce
         this.hash = this.calculateHash()
-        this.nonce = 0
+        this.bloomFilter
+        this.merkleTree
     }
 
     calculateHash() {
         return SHA256(this.timestamp + this.previousHash + JSON.stringify(this.transactions) + this.nonce).toString()
+    }
+
+    initBloomFilter() {
+        this.bloomFilter = BloomFilter.from(this.transactions.map(x => x.calculateHash()), 0.05)
+    }
+
+    initMerkleTree() {
+        this.merkleTree = this.merkleTree = new MerkleTree(this.transactions.map(x => x.calculateHash()))
     }
 
     mineBlock(difficulty) {
@@ -27,11 +37,13 @@ class Block {
             this.nonce++
             this.hash = this.calculateHash()
         }
-        let hashTransactions = this.transactions.map(x => Object.assign(new Transaction, x).calculateHash())
-        this.bloomFilter = BloomFilter.from(hashTransactions, 0.05)
-        this.merkleTree = new MerkleTree(hashTransactions)
+        this.initBloomFilter()
+        this.initMerkleTree()
         console.log('Block mined - ' + this.hash);
     }
+
+
+
     hasValidTransactions() {
         for (const tx of this.transactions) {
             if (!tx.isValid()) {
@@ -52,9 +64,7 @@ class Block {
             return this.merkleTree.verify(proof, txHash, root)
         }
         return false
-
     }
-
 }
 
 module.exports.Block = Block
