@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('new-project3:server');
 var http = require('http');
-
+var BlockChainSchema = require('../schemes/BlockChainSchema.js');
 /**
  * Get port from environment and store in Express.
  */
@@ -28,6 +28,18 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+let sashaCoin = new BlockChainSchema({
+  _id: 1,
+  chain: [],
+  difficulty: 2,
+  pendingTransaction: [],
+  miningReward: 100
+})
+sashaCoin.chain.push(sashaCoin.createGenesisBlock())
+sashaCoin.save().catch(err => {
+  console.log("...");
+})
 
 /**
  * Normalize a port into a number, string, or false.

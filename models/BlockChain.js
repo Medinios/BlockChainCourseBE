@@ -148,10 +148,20 @@ class BlockChain {
         return this
 
     }
+
     addNewUser(publicKey) {
         var tx = new Transaction(null, publicKey, 1000)
         var block = new Block(this.getLatestBlock(), Date.now(), [tx], 0)
         this.chain.push(block.mineBlock(this.difficulty))
+    }
+
+    getCoinTotal() {
+        let balance = 0
+        for (const block of this.chain)
+            for (const trans of block.transactions)
+                if (trans.fromAddress === null)
+                    balance += trans.amount
+        return balance
     }
 
 }

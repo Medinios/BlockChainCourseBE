@@ -33,27 +33,6 @@ exports.blockchain_perform_mining_post = function (req, res) {
         })
 };
 
-// Create New BlockChain
-exports.blockchain_create_post = function (req, res) {
-    let sashaCoin = new BlockChainSchema({
-        _id: 1,
-        chain: [],
-        difficulty: 2,
-        pendingTransaction: [],
-        miningReward: 100
-    })
-    sashaCoin.chain.push(sashaCoin.createGenesisBlock())
-    sashaCoin.save().then(result => {
-        res.status(201).json({
-            message: "BlockChain Created"
-        })
-    }).catch(err => {
-        res.status(500).json({
-            message: "BlockChain Already Exist"
-        })
-    })
-};
-
 // Add and Sign new transaction
 exports.blockchain_add_transaction_post = function (req, res) {
     tx = new Transaction(req.body.from, req.body.to, req.body.amount)
@@ -119,6 +98,43 @@ exports.blockchain_get_transactions = function (req, res) {
         .then(doc => {
             res.json({
                 transactions: doc.toBlockChainSchema().getTransactionsOfAddress(request.publicKey)
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}
+
+exports.blockchain_add_user = function (req, res) {
+    const request = req.body
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            doc.toBlockChainSchema().addNewUser(request.publicKey)
+            doc.save()
+            res.json({
+                publicKey: request.publicKey
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}
+
+exports.blockchain_get_total = function (req, res) {
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            res.json({
+                totalCoins: doc.toBlockChainSchema().getCoinTotal()
             })
         })
         .catch(err => {
