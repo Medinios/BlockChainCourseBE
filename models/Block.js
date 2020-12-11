@@ -16,20 +16,31 @@ class Block {
         this.transactions = transactions
         this.nonce = nonce
         this.hash = this.calculateHash()
-        this.bloomFilter
-        this.merkleTree
     }
 
     calculateHash() {
         return SHA256(this.timestamp + this.previousHash + JSON.stringify(this.transactions) + this.nonce).toString()
     }
+    initTransactionsHash() {
+        this.hashTransactions = []
+        for (let i = 0; i < this.transactions.length; i++) {
+            this.hashTransactions.push(this.transactions[i].calculateHash())
+        }
+    }
 
+    // initBloomFilter() {
+    //     this.bloomFilter = BloomFilter.from(this.transactions.map(x => x.calculateHash()), 0.05)
+    // }
+
+    // initMerkleTree() {
+    //     this.merkleTree = this.merkleTree = new MerkleTree(this.transactions.map(x => x.calculateHash()))
+    // }
     initBloomFilter() {
-        this.bloomFilter = BloomFilter.from(this.transactions.map(x => x.calculateHash()), 0.05)
+        this.bloomFilter = BloomFilter.from(this.hashTransactions, 0.05)
     }
 
     initMerkleTree() {
-        this.merkleTree = this.merkleTree = new MerkleTree(this.transactions.map(x => x.calculateHash()))
+        this.merkleTree = this.merkleTree = new MerkleTree(this.hashTransactions)
     }
 
     mineBlock(difficulty) {
@@ -37,6 +48,7 @@ class Block {
             this.nonce++
             this.hash = this.calculateHash()
         }
+        this.initTransactionsHash()
         this.initBloomFilter()
         this.initMerkleTree()
         console.log('Block mined - ' + this.hash);

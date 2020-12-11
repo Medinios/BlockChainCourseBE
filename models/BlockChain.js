@@ -89,6 +89,16 @@ class BlockChain {
         return true
     }
 
+    hasTransaction(transaction) {
+        for (let i = 1; i < this.chain.length; i++) {
+            const block = this.chain[i]
+            var res = block.hasTransaction(transaction)
+            if (res !== false)
+                return res
+        }
+        return res
+    }
+
     toBlockChain() {
         var newBlockChain = new BlockChain()
         this.chain.forEach(block => {
@@ -115,6 +125,9 @@ class BlockChain {
             for (let j = 0; j < this.chain[i].transactions.length; j++) {
                 this.chain[i].transactions[j] = Object.assign(new Transaction, this.chain[i].transactions[j])
             }
+            this.chain[i].initTransactionsHash()
+            this.chain[i].initBloomFilter()
+            this.chain[i].initMerkleTree()
         }
         for (let i = 0; i < this.pendingTransaction.length; i++) {
             this.pendingTransaction[i] = Object.assign(new Transaction, this.pendingTransaction[i])
