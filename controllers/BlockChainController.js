@@ -145,3 +145,20 @@ exports.blockchain_get_total = function (req, res) {
         })
 
 }
+
+exports.blockchain_get_pending = function (req, res) {
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            res.json({
+                count: doc.toBlockChainSchema().pendingTransaction.length
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}

@@ -28,13 +28,6 @@ class Block {
         }
     }
 
-    // initBloomFilter() {
-    //     this.bloomFilter = BloomFilter.from(this.transactions.map(x => x.calculateHash()), 0.05)
-    // }
-
-    // initMerkleTree() {
-    //     this.merkleTree = this.merkleTree = new MerkleTree(this.transactions.map(x => x.calculateHash()))
-    // }
     initBloomFilter() {
         this.bloomFilter = BloomFilter.from(this.hashTransactions, 0.05)
     }

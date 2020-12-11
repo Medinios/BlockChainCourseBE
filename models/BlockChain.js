@@ -112,26 +112,6 @@ class BlockChain {
         return res
     }
 
-    toBlockChain() {
-        var newBlockChain = new BlockChain()
-        this.chain.forEach(block => {
-            var newBlock = Object.assign(new Block, {
-                previousHash: block.previousHash,
-                timestamp: block.timestamp,
-                nonce: block.nonce,
-                hash: block.hash
-            })
-            block.transactions.forEach(tx => {
-                newBlock.transactions.push(Object.assign(new Transaction, tx))
-            })
-            newBlockChain.chain.push(newBlock)
-        });
-        this.pendingTransaction.forEach(tx => {
-            newBlockChain.addTransaction(Object.assign(new Transaction, tx))
-        })
-        return newBlockChain
-    }
-
     toBlockChainSchema() {
         for (let i = 0; i < this.chain.length; i++) {
             this.chain[i] = Object.assign(new Block, this.chain[i])
