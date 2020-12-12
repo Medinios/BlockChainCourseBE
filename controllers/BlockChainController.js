@@ -161,3 +161,23 @@ exports.blockchain_get_pending = function (req, res) {
         })
 
 }
+
+
+exports.blockchain_get_last_blocks = function (req, res) {
+    const request = req.body
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            length = doc.toBlockChainSchema().chain.length
+            res.json({
+                lastBlocksMined: doc.toBlockChainSchema().chain.slice(Math.max(length - 3, 0))
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}

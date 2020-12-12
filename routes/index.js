@@ -31,4 +31,7 @@ router.post('/blockchain/get_total', blockchain_controller.blockchain_get_total)
 // // POST request to get count of pending
 router.post('/blockchain/get_pending', blockchain_controller.blockchain_get_pending);
 
+// // POST request to get last blocks
+router.post('/blockchain/get_last_blocks', blockchain_controller.blockchain_get_last_blocks);
+
 module.exports = router;

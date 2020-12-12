@@ -79,14 +79,3 @@ exports.profile = async (req, res) => {
     if (!user) res.status(400).send('Username not found');
     res.send(user)
 }
-
-exports.publicKey_to_user = async (req, res) => {
-    console.log(req.body);
-    let user = await userModel.findOne({
-        publicKey: req.body.publicKey
-    }, {
-        username: 1
-    });
-    if (!user) res.status(400).send('publicKey not found');
-    res.send(user)
-}
