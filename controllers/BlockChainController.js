@@ -20,7 +20,6 @@ exports.blockchain_perform_mining_post = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            console.log(request.publicKey);
             doc.toBlockChainSchema().miningPendingTransaction(request.publicKey)
             doc.save()
             res.json(doc)
