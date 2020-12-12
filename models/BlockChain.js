@@ -131,8 +131,9 @@ class BlockChain {
 
     addNewUser(publicKey) {
         var tx = new Transaction(null, publicKey, 1000)
-        var block = new Block(this.getLatestBlock(), Date.now(), [tx], 0)
-        this.chain.push(block.mineBlock(this.difficulty))
+        var block = new Block(this.getLatestBlock().hash, Date.now(), [tx], 0)
+        block.mineBlock(this.difficulty)
+        this.chain.push(block)
     }
 
     getCoinTotal() {

@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var mongoose = require('mongoose')
 var app = require('../app');
 var debug = require('debug')('new-project3:server');
@@ -47,11 +48,75 @@ server.on('listening', onListening);
 initiate()
 
 async function initiate() {
-  let sashaCoin = await createBC()
-  createUsers()
+  await createBC()
+  await createUsers()
 }
 
 
+async function fillDB() {
+  for (let i = 0; i < 3; i++) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:3000/blockchain/add_new_user", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    const key = keys[i].publicKey;
+    xhr.send(JSON.stringify({
+      publicKey: key
+    }));
+    await resolveAfter1Seconds()
+    console.log("ok");
+  }
+
+  for (let i = 0; i < 18; i++) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:3000/blockchain/add_transaction", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    const tx = savedTransactions[i];
+    xhr.send(JSON.stringify({
+      from: tx.fromAddress,
+      to: tx.toAddress,
+      amount: i,
+      privateKey: tx.privateKey
+    }));
+    await resolveAfter1Seconds()
+    if ((i + 1) % 4 == 0) {
+      console.log("i = " + i);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:3000/blockchain/mining", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({
+        publicKey: keys[0].publicKey
+      }));
+      await resolveAfter1Seconds()
+    }
+  }
+}
+//Create Block Chain with 18 transactions, and 3 mining actions
+
+async function createBC() {
+  BlockChainSchema.findById(1)
+    .exec()
+    .then(async function (doc) {
+      if (doc === null) {
+        let sashaCoin = new BlockChainSchema({
+          _id: 1,
+          chain: [],
+          difficulty: 2,
+          pendingTransaction: [],
+          miningReward: 100
+        })
+        sashaCoin.chain.push(sashaCoin.createGenesisBlock())
+        await saveBC(sashaCoin)
+        fillDB()
+        console.log(1);
+      } else {
+        console.log(2);
+      }
+    })
+}
+
+async function saveBC(blockChain) {
+  await blockChain.save()
+}
 //Create 3 Users
 async function createUsers() {
   const salt = await bcrypt.genSalt(10);
@@ -66,40 +131,18 @@ async function createUsers() {
     });
     user.password = await bcrypt.hash('123456', salt);
     user.save().catch(err => {
-      console.log("User Exist, Continue");
-
+      console.log("User Exist, Continue")
     })
   }
 }
 
-//Create Block Chain with 18 transactions, and 3 mining actions
-async function createBC() {
-  let sashaCoin = new BlockChainSchema({
-    _id: 1,
-    chain: [],
-    difficulty: 2,
-    pendingTransaction: [],
-    miningReward: 100
-  })
-  sashaCoin.chain.push(sashaCoin.createGenesisBlock())
-  for (let i = 0; i < 3; i++) {
-    const key = keys[i].publicKey;
-    sashaCoin.addNewUser(key)
-  }
-  for (let i = 0; i < 18; i++) {
-    var tx = new Transaction(savedTransactions[i].fromAddress, savedTransactions[i].toAddress, savedTransactions[i].amount, i)
-    tx.signTransaction(ec.keyFromPrivate(savedTransactions[i].privateKey))
-    await sashaCoin.addTransaction(tx)
-    if ((i + 1) % 4 == 0) {
-      console.log("i = " + i);
-      sashaCoin.miningPendingTransaction(keys[0].publicKey)
-    }
-  }
-  sashaCoin.save().catch(err => {
-    console.log("Blockchain Already Exist, Continue");
-  })
+function resolveAfter1Seconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, 1000);
+  });
 }
-
 
 /**
  * Normalize a port into a number, string, or false.
