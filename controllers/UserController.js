@@ -34,27 +34,28 @@ exports.createUser = async (req, res) => {
     user.password = await bcrypt.hash(req.body.password, salt);
 
 
-        // save user
-        try {
-            const createUser = await user.save();
-            BlockChainSchema.findById(1)
-        .exec()
-        .then(doc => {
-            doc.toBlockChainSchema().addNewUser(publicKey)
-            doc.save()
-            res.send({'privateKey' : privateKey});
-        })
-        .catch(err => {
-            console.log(err);
-            res.json({
-                Error: "Error"
+    // save user
+    try {
+        const createUser = await user.save();
+        BlockChainSchema.findById(1)
+            .exec()
+            .then(doc => {
+                doc.toBlockChainSchema().addNewUser(publicKey)
+                doc.save()
+                res.send({
+                    'privateKey': privateKey
+                });
             })
-        })
-          
-        }
-        catch(err) {
-            res.send(err);
-        }
+            .catch(err => {
+                console.log(err);
+                res.json({
+                    Error: "Error"
+                })
+            })
+
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 
@@ -78,14 +79,21 @@ exports.login = async (req, res) => {
 }
 
 exports.profile = async (req, res) => {
-        let user = await userModel.findOne({ username : req.params.username} , {password:0 , privateKey: 0});
-        if (!user) res.status(400).send('Username not found');
-        res.send(user)
-    }
+    let user = await userModel.findOne({
+        username: req.params.username
+    }, {
+        password: 0,
+        privateKey: 0
+    });
+    if (!user) res.status(400).send('Username not found');
+    res.send(user)
+}
 
-    exports.users_list = async (req, res) => {
-        let users = await userModel.find({} , {password:0 , privateKey: 0});
-        if (!users) res.status(400).send('users not found');
-        res.send(users);
-    }
-
+exports.users_list = async (req, res) => {
+    let users = await userModel.find({}, {
+        password: 0,
+        privateKey: 0
+    });
+    if (!users) res.status(400).send('users not found');
+    res.send(users);
+}

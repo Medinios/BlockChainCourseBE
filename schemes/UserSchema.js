@@ -1,13 +1,15 @@
 var mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
+mongoose.set('useCreateIndex', true);
 
 const UserSchema = new Schema({
-    username:  {
+    username: {
         minlength: 3,
         maxlength: 20,
         required: true,
-        type : String
+        type: String,
+        unique: true
     },
     publicKey: String,
     privateKey: String,
@@ -15,7 +17,7 @@ const UserSchema = new Schema({
         minlength: 3,
         maxlength: 256,
         required: true,
-        type : String
+        type: String
     },
     mail: String
 });
