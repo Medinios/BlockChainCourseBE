@@ -28,5 +28,7 @@ router.post('/blockchain/get_transactions', blockchain_controller.blockchain_get
 // // POST request to get total coins
 router.post('/blockchain/get_total', blockchain_controller.blockchain_get_total);
 
+// // POST request to get count of pending
+router.post('/blockchain/get_pending', blockchain_controller.blockchain_get_pending);
 
 module.exports = router;

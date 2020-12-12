@@ -54,10 +54,10 @@ class BlockChain {
         for (const block of this.chain) {
             for (const trans of block.transactions) {
                 if (trans.fromAddress === address) {
-                    balance -= trans.amount
+                    balance -= parseInt(trans.amount);
                 }
                 if (trans.toAddress === address) {
-                    balance += trans.amount
+                    balance += parseInt(trans.amount);
                 }
             }
         }
@@ -136,6 +136,7 @@ class BlockChain {
         for (let i = 0; i < this.chain.length; i++) {
             this.chain[i] = Object.assign(new Block, this.chain[i])
             for (let j = 0; j < this.chain[i].transactions.length; j++) {
+                console.log(this.chain[i].transactions[j]);
                 this.chain[i].transactions[j] = Object.assign(new Transaction, this.chain[i].transactions[j])
             }
             this.chain[i].initTransactionsHash()
@@ -160,7 +161,7 @@ class BlockChain {
         for (const block of this.chain)
             for (const trans of block.transactions)
                 if (trans.fromAddress === null)
-                    balance += trans.amount
+                    balance += parseInt(trans.amount)
         return balance
     }
 

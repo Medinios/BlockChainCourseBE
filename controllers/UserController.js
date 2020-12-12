@@ -1,7 +1,7 @@
 const userModel = require('../schemes/UserSchema.js');
 const bcrypt = require("bcrypt");
 const EC = require('elliptic').ec;
-
+const BlockChainSchema = require('../schemes/BlockChainSchema');
 // You can use any elliptic curve you want
 const ec = new EC('secp256k1');
 
@@ -35,8 +35,20 @@ exports.createUser = async (req , res) => {
         // save user
         try {
             const createUser = await user.save();
-            // send back true means user successfully created.
+            BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            doc.toBlockChainSchema().addNewUser(publicKey)
+            doc.save()
             res.send({'privateKey' : privateKey});
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+          
         }
         catch(err) {
             res.send(err);
@@ -55,9 +67,14 @@ exports.login = async (req, res) => {
     res.send({ privateKey : user.privateKey, id: user._id, username: user.username, publicKey: user.publicKey });
     }
 
-    exports.profile = async (req, res) => {
-        console.log(req.params);
+exports.profile = async (req, res) => {
         let user = await userModel.findOne({ username : req.params.username} , {password:0 , privateKey: 0});
         if (!user) res.status(400).send('Username not found');
         res.send(user)
+    }
+
+    exports.users_list = async (req, res) => {
+        let users = await userModel.find({} , {password:0 , privateKey: 0});
+        if (!users) res.status(400).send('users not found');
+        res.send(users);
     }
