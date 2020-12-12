@@ -116,7 +116,6 @@ class BlockChain {
         for (let i = 0; i < this.chain.length; i++) {
             this.chain[i] = Object.assign(new Block, this.chain[i])
             for (let j = 0; j < this.chain[i].transactions.length; j++) {
-                console.log(this.chain[i].transactions[j]);
                 this.chain[i].transactions[j] = Object.assign(new Transaction, this.chain[i].transactions[j])
             }
             this.chain[i].initTransactionsHash()

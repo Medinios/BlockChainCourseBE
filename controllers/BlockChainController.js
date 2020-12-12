@@ -60,7 +60,7 @@ exports.blockchain_verify_get = function (req, res) {
         .exec()
         .then(doc => {
             res.json({
-                hasTransaction: doc.toBlockChainSchema().hasTransaction(new Transaction(request.from, request.to, request.amount, request.timestamp))
+                hasTransaction: doc.toBlockChainSchema().hasTransaction(new Transaction(request.fromAddress, request.toAddress, request.amount, request.timestamp))
             })
         })
         .catch(err => {
@@ -170,7 +170,7 @@ exports.blockchain_get_last_blocks = function (req, res) {
         .then(doc => {
             length = doc.toBlockChainSchema().chain.length
             res.json({
-                lastBlocksMined: doc.toBlockChainSchema().chain.slice(Math.max(length - 3, 0))
+                lastBlocksMined: doc.toBlockChainSchema().chain.slice(Math.max(length - 3, 0)).reverse()
             })
         })
         .catch(err => {

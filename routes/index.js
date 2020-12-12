@@ -17,7 +17,7 @@ router.post('/blockchain/add_new_user', blockchain_controller.blockchain_add_use
 router.post('/blockchain/add_transaction', blockchain_controller.blockchain_add_transaction_post);
 
 // // POST request to verify transaction was made
-router.get('/blockchain/verify', blockchain_controller.blockchain_verify_get);
+router.post('/blockchain/verify', blockchain_controller.blockchain_verify_get);
 
 // // POST request to get balance for address
 router.post('/blockchain/get_balance', blockchain_controller.blockchain_get_balance);

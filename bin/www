@@ -38,7 +38,7 @@ let sashaCoin = new BlockChainSchema({
 })
 sashaCoin.chain.push(sashaCoin.createGenesisBlock())
 sashaCoin.save().catch(err => {
-  console.log("...");
+  console.log("Blockchain is created successfully");
 })
 
 /**
