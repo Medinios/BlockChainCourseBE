@@ -20,7 +20,6 @@ exports.blockchain_perform_mining_post = function (req, res) {
     BlockChainSchema.findById(1)
         .exec()
         .then(doc => {
-            console.log(request.publicKey);
             doc.toBlockChainSchema().miningPendingTransaction(request.publicKey)
             doc.save()
             res.json(doc)
@@ -152,6 +151,26 @@ exports.blockchain_get_pending = function (req, res) {
         .then(doc => {
             res.json({
                 count: doc.toBlockChainSchema().pendingTransaction.length
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                Error: "Error"
+            })
+        })
+
+}
+
+
+exports.blockchain_get_last_blocks = function (req, res) {
+    const request = req.body
+    BlockChainSchema.findById(1)
+        .exec()
+        .then(doc => {
+            length = doc.toBlockChainSchema().chain.length
+            res.json({
+                lastBlocksMined: doc.toBlockChainSchema().chain.slice(Math.max(length - 3, 0))
             })
         })
         .catch(err => {
